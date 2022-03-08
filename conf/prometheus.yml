@@ -1,0 +1,36 @@
+# https://prometheus.io/docs/prometheus/latest/configuration/configuration
+#
+global:
+  scrape_interval: 15s     # Set scrape interval. Default 1m.
+  scrape_timeout: 10s      # Set scrape request times out. Default 10s.
+  evaluation_interval: 15s # Evaluate rules interval. Default 1m.
+  external_labels:
+    monitor: 'codelab'
+  query_log_file: '/opt/prometheus/var/log/query.log'
+
+rule_files:
+  #- "conf/*.rules"
+  #- "first_rules.yml"
+
+scrape_configs:
+  - job_name: 'prometheus'
+    honor_labels: true
+    honor_timestamps: true
+    metrics_path: '/metrics'
+    scheme: 'http'
+    static_configs:
+      - targets: ['localhost:9090']
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          #- localhost:9093
+
+#remote_write:
+
+#remote_read:
+
+#storage:
+
+
