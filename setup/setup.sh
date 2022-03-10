@@ -69,11 +69,15 @@ init() {
   chmod 755 $HOME
 
   _enable_service prometheus.service
+  _enable_service node_exporter.service
+  _enable_service statsd_exporter.service
 }
 
 deinit() {
   _rmdir $HOME/var
   _rmdir $HOME/var/log
+  _disable_service statsd_exporter.service
+  _disable_service node_exporter.service
   _disable_service prometheus.service
 }
 
@@ -87,6 +91,8 @@ stop() {
 
 show() {
   systemctl status prometheus.service
+  systemctl status node_exporter.service
+  systemctl status statsd_exporter.service
 }
 
 case "$1" in

@@ -1,0 +1,16 @@
+[Unit]
+Description=statsd_exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+Group=root
+Type=simple
+ExecStart=/opt/prometheus/bin/statsd_exporter \
+    --web.listen-address localhost:9102 \
+    --statsd.listen-udp localhost:9125 \
+    --statsd.listen-tcp localhost:9125
+
+[Install]
+WantedBy=multi-user.target
