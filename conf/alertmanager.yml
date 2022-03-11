@@ -1,9 +1,19 @@
+# https://github.com/prometheus/alertmanager
+#
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: 'localhost:25'
+  smtp_from: 'alertmanager@imssyang.com'
+  smtp_auth_username: imssyang
+  smtp_auth_password: imssyang
+  smtp_require_tls: false
+
 route:
-  group_by: ['alertname']
+  receiver: 'web.hook'
+  group_by: ['alertname', 'cluster']
   group_wait: 30s
   group_interval: 5m
   repeat_interval: 1h
-  receiver: 'web.hook'
 
 receivers:
 - name: 'web.hook'
