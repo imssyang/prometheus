@@ -33,18 +33,18 @@ scrape_configs:
           group: 'system'
           instance: 'default'
 
-        #- job_name: 'statsd'
-        #  scrape_interval: 5s
-        #  static_configs:
-        #    - targets: ['192.168.5.220:9102']
+  - job_name: 'statsd'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['192.168.5.220:9102']
+        labels:
+          group: 'system'
+          instance: 'default'
 
 alerting:
   alertmanagers:
     - static_configs:
         - targets: ['192.168.5.220:9093']
-          labels:
-            group: 'standard'
-            instance: 'default'
 
 #remote_write:
 
