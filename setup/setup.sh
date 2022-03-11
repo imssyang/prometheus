@@ -62,8 +62,8 @@ _stop_service() {
 }
 
 init() {
-  _mkdir $HOME/var
-  _mkdir $HOME/var/log
+  _mkdir $HOME/data
+  _mkdir $HOME/log
 
   chown -R root:root $HOME
   chmod 755 $HOME
@@ -74,8 +74,8 @@ init() {
 }
 
 deinit() {
-  _rmdir $HOME/var
-  _rmdir $HOME/var/log
+  _rmdir $HOME/data
+  _rmdir $HOME/log
   _disable_service statsd_exporter.service
   _disable_service node_exporter.service
   _disable_service prometheus.service
@@ -83,10 +83,14 @@ deinit() {
 
 start() {
   _start_service prometheus.service
+  _start_service node_exporter.service
+  _start_service statsd_exporter.service
 }
 
 stop() {
   _stop_service prometheus.service
+  _stop_service node_exporter.service
+  _stop_service statsd_exporter.service
 }
 
 show() {

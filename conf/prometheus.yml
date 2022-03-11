@@ -1,4 +1,5 @@
 # https://prometheus.io/docs/prometheus/latest/configuration/configuration
+# https://yunlzheng.gitbook.io/prometheus-book
 #
 global:
   scrape_interval: 15s     # Set scrape interval. Default 1m.
@@ -6,7 +7,7 @@ global:
   evaluation_interval: 15s # Evaluate rules interval. Default 1m.
   external_labels:
     monitor: 'codelab'
-  query_log_file: '/opt/prometheus/var/log/query.log'
+  query_log_file: '/opt/prometheus/log/query.log'
 
 rule_files:
   - '/opt/prometheus/conf/rules/cpu-node.rules.yml'
@@ -19,25 +20,31 @@ scrape_configs:
     metrics_path: '/metrics'
     scheme: 'http'
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ['192.168.5.220:9090']
+        labels:
+          group: 'standard'
+          instance: 'default'
 
-  - job_name: 'node'
+  - job_name: 'node_exporter'
     scrape_interval: 5s
     static_configs:
       - targets: ['192.168.5.220:9100']
-        #labels:
-        #  group: 'production'
+        labels:
+          group: 'system'
+          instance: 'default'
 
-  - job_name: 'statsd'
-    scrape_interval: 5s
-    static_configs:
-      - targets: ['192.168.5.220:9102']
+        #- job_name: 'statsd'
+        #  scrape_interval: 5s
+        #  static_configs:
+        #    - targets: ['192.168.5.220:9102']
 
 alerting:
   alertmanagers:
     - static_configs:
-        - targets:
-          #- localhost:9093
+        - targets: ['192.168.5.220:9093']
+          labels:
+            group: 'standard'
+            instance: 'default'
 
 #remote_write:
 

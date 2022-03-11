@@ -1,4 +1,5 @@
 # Ignore by git
 archive
 bin
-var
+data
+log

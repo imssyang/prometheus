@@ -1,3 +1,4 @@
 # Ignore by opt
 archive
-var
+data
+log

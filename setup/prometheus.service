@@ -9,7 +9,7 @@ Group=root
 Type=simple
 ExecStart=/opt/prometheus/bin/prometheus \
     --config.file /opt/prometheus/conf/prometheus.yml \
-    --storage.tsdb.path /opt/prometheus/var/ \
+    --storage.tsdb.path /opt/prometheus/data/ \
     --web.console.templates=/opt/prometheus/conf/consoles \
     --web.console.libraries=/opt/prometheus/conf/console_libraries
 

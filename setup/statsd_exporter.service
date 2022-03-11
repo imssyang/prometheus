@@ -8,9 +8,9 @@ User=root
 Group=root
 Type=simple
 ExecStart=/opt/prometheus/bin/statsd_exporter \
-    --web.listen-address localhost:9102 \
-    --statsd.listen-udp localhost:9125 \
-    --statsd.listen-tcp localhost:9125
+    --web.listen-address 192.168.5.220:9102 \
+    --statsd.listen-udp 192.168.5.220:9125 \
+    --statsd.listen-tcp 192.168.5.220:9125
 
 [Install]
 WantedBy=multi-user.target
