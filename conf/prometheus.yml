@@ -25,6 +25,27 @@ scrape_configs:
           group: 'standard'
           instance: 'default'
 
+  - job_name: 'blackbox_exporter'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    dns_sd_configs:
+      - names:
+          - www.imssyang.com
+        type: A
+        port: 443
+    static_configs:
+      - targets:
+        - http://www.imssyang.com
+        - https://www.imssyang.com
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.5.220:9115
+
   - job_name: 'node_exporter'
     scrape_interval: 5s
     static_configs:
@@ -33,7 +54,7 @@ scrape_configs:
           group: 'system'
           instance: 'default'
 
-  - job_name: 'statsd'
+  - job_name: 'statsd_exporter'
     scrape_interval: 5s
     static_configs:
       - targets: ['192.168.5.220:9102']
