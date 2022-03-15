@@ -1,12 +1,126 @@
 modules:
+  dns_soa:
+    prober: dns
+    dns:
+      query_name: "imssyang.com"
+      query_type: "SOA"
+  dns_tcp:
+    prober: dns
+    dns:
+      transport_protocol: "tcp"
+      preferred_ip_protocol: "ip4"
+      query_name: "www.imssyang.com"
+  dns_udp:
+    prober: dns
+    timeout: 5s
+    dns:
+      query_name: "www.imssyang.com"
+      query_type: "A"
+      valid_rcodes:
+      - NOERROR
+      validate_answer_rrs:
+        fail_if_matches_regexp:
+        - ".*127.0.0.1"
+        fail_if_all_match_regexp:
+        - ".*127.0.0.1"
+        fail_if_not_matches_regexp:
+        - "www.imssyang.com.\t300\tIN\tA\t127.0.0.1"
+        fail_if_none_matches_regexp:
+        - "127.0.0.1"
+      validate_authority_rrs:
+        fail_if_matches_regexp:
+        - ".*127.0.0.1"
+      validate_additional_rrs:
+        fail_if_matches_regexp:
+        - ".*127.0.0.1"
   http_2xx:
     prober: http
-  http_post_2xx:
+    timeout: 5s
+    http:
+      valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+      valid_status_codes: []
+      method: GET
+      #headers:
+      #  Host: vhost.imssyang.com
+      #  Accept-Language: en-US
+      #  Origin: imssyang.com
+      no_follow_redirects: false
+      fail_if_ssl: false
+      fail_if_not_ssl: false
+      fail_if_header_matches:
+        - header: Set-Cookie
+          allow_missing: true
+          regexp: '.*'
+      #fail_if_header_not_matches:
+      #  - header: Access-Control-Allow-Origin
+      #    regexp: '(\*|imssyang\.com)'
+      tls_config:
+        insecure_skip_verify: false
+      preferred_ip_protocol: "ip4"
+      ip_protocol_fallback: false
+  http_basic_auth:
     prober: http
+    timeout: 5s
     http:
       method: POST
-  tcp_connect:
+      headers:
+        Host: "login.imssyang.com"
+      basic_auth:
+        username: "imssyang"
+        password: "imssyang"
+  http_custom_ca:
+    prober: http
+    http:
+      method: GET
+      tls_config:
+        ca_file: "/certs/imssyang.crt"
+  http_gzip:
+    prober: http
+    http:
+      method: GET
+      compression: gzip
+  http_gzip_with_accept_encoding:
+    prober: http
+    http:
+      method: GET
+      compression: gzip
+      headers:
+        Accept-Encoding: gzip
+  http_post_2xx:
+    prober: http
+    timeout: 5s
+    http:
+      method: POST
+      headers:
+        Content-Type: application/json
+      body: '{}'
+  icmp:
+    prober: icmp
+    timeout: 5s
+    icmp:
+      preferred_ip_protocol: "ip4"
+      source_ip_address: "127.0.0.1"
+  imap_starttls:
     prober: tcp
+    timeout: 5s
+    tcp:
+      query_response:
+        - expect: "OK.*STARTTLS"
+        - send: ". STARTTLS"
+        - expect: "OK"
+        - starttls: true
+        - send: ". capability"
+        - expect: "CAPABILITY IMAP4rev1"
+  irc_banner:
+    prober: tcp
+    timeout: 5s
+    tcp:
+      query_response:
+        - send: "NICK prober"
+        - send: "USER prober prober prober :prober"
+        - expect: "PING :([^ ]+)"
+          send: "PONG ${1}"
+        - expect: "^:[^ ]+ 001"
   pop3s_banner:
     prober: tcp
     tcp:
@@ -15,20 +129,31 @@ modules:
       tls: true
       tls_config:
         insecure_skip_verify: false
+  smtp_starttls:
+    prober: tcp
+    timeout: 5s
+    tcp:
+      query_response:
+        - expect: "^220 ([^ ]+) ESMTP (.+)$"
+        - send: "EHLO prober\r"
+        - expect: "^250-STARTTLS"
+        - send: "STARTTLS\r"
+        - expect: "^220"
+        - starttls: true
+        - send: "EHLO prober\r"
+        - expect: "^250-AUTH"
+        - send: "QUIT\r"
   ssh_banner:
     prober: tcp
     tcp:
       query_response:
       - expect: "^SSH-2.0-"
       - send: "SSH-2.0-blackbox-ssh-check"
-  irc_banner:
+  tcp_connect:
     prober: tcp
+    timeout: 5s
+  tls_connect:
+    prober: tcp
+    timeout: 5s
     tcp:
-      query_response:
-      - send: "NICK prober"
-      - send: "USER prober prober prober :prober"
-      - expect: "PING :([^ ]+)"
-        send: "PONG ${1}"
-      - expect: "^:[^ ]+ 001"
-  icmp:
-    prober: icmp
+      tls: true
