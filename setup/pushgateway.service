@@ -1,0 +1,14 @@
+[Unit]
+Description=pushgateway
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+Group=root
+Type=simple
+ExecStart=/opt/prometheus/bin/pushgateway \
+    --web.listen-address '192.168.5.220:9091'
+
+[Install]
+WantedBy=multi-user.target
