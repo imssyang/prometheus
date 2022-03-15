@@ -1,0 +1,13 @@
+[Unit]
+Description=cadvisor
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+Group=root
+Type=simple
+ExecStart=/opt/prometheus/bin/cadvisor -port 8010 -docker unix:///opt/docker/run/docker.sock
+
+[Install]
+WantedBy=multi-user.target

@@ -72,6 +72,7 @@ init() {
   _enable_service alertmanager.service
   _enable_service node_exporter.service
   _enable_service statsd_exporter.service
+  _enable_service cadvisor.service
 }
 
 deinit() {
@@ -81,6 +82,7 @@ deinit() {
   _disable_service alertmanager.service
   _disable_service node_exporter.service
   _disable_service statsd_exporter.service
+  _disable_service cadvisor.service
 }
 
 start() {
@@ -88,6 +90,7 @@ start() {
   _start_service alertmanager.service
   _start_service node_exporter.service
   _start_service statsd_exporter.service
+  _start_service cadvisor.service
 }
 
 stop() {
@@ -95,6 +98,7 @@ stop() {
   _stop_service alertmanager.service
   _stop_service node_exporter.service
   _stop_service statsd_exporter.service
+  _stop_service cadvisor.service
 }
 
 show() {
@@ -102,6 +106,7 @@ show() {
   systemctl status alertmanager.service
   systemctl status node_exporter.service
   systemctl status statsd_exporter.service
+  systemctl status cadvisor.service
 }
 
 case "$1" in
