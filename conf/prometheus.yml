@@ -34,10 +34,6 @@ scrape_configs:
           - www.imssyang.com
         type: A
         port: 443
-    static_configs:
-      - targets:
-        - http://www.imssyang.com
-        - https://www.imssyang.com
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -45,6 +41,13 @@ scrape_configs:
         target_label: instance
       - target_label: __address__
         replacement: 192.168.5.220:9115
+    static_configs:
+      - targets:
+        - http://www.imssyang.com
+        - https://www.imssyang.com
+        labels:
+          group: 'system'
+          instance: 'default'
 
   - job_name: 'node_exporter'
     scrape_interval: 5s
@@ -55,19 +58,14 @@ scrape_configs:
           instance: 'default'
 
   - job_name: 'snmp_exporter'
-    static_configs:
-      - targets:
-        - 192.168.5.220
     metrics_path: /snmp
     params:
       module: [if_mib]
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-      - source_labels: [__param_target]
-        target_label: instance
-      - target_label: __address__
-        replacement: 192.168.5.220:9116
+    static_configs:
+      - targets: ['192.168.5.220:9116']
+        labels:
+          group: 'system'
+          instance: 'default'
 
   - job_name: 'statsd_exporter'
     scrape_interval: 5s
