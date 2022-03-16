@@ -75,6 +75,11 @@ scrape_configs:
           group: 'system'
           instance: 'default'
 
+  - job_name: 'python-app'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['192.168.5.220:8000']
+
 alerting:
   alertmanagers:
     - static_configs:
