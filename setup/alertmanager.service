@@ -1,5 +1,5 @@
 [Unit]
-Description=alertmanager
+Description=Prometheus Alertmanager
 Wants=network-online.target
 After=network-online.target
 
@@ -9,8 +9,8 @@ Group=root
 Type=simple
 ExecStart=/opt/prometheus/bin/alertmanager \
     --config.file /opt/prometheus/conf/alertmanager.yml \
-    --web.listen-address 192.168.5.220:9093 \
-    --cluster.listen-address 192.168.5.220:9094 \
+    --cluster.listen-address '0.0.0.0:9094' \
+    --web.listen-address '0.0.0.0:9093' \
     --storage.path /opt/prometheus/data/alertmanager/
 
 [Install]

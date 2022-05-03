@@ -68,60 +68,64 @@ init() {
   chown -R root:root $HOME
   chmod 755 $HOME
 
-  _enable_service prometheus.service
   _enable_service alertmanager.service
-  _enable_service blackbox_exporter.service
-  _enable_service cadvisor.service
+  #_enable_service blackbox_exporter.service
+  #_enable_service cadvisor.service
   _enable_service node_exporter.service
+  _enable_service prometheus.service
   _enable_service pushgateway.service
-  _enable_service snmp_exporter.service
-  _enable_service statsd_exporter.service
+  #_enable_service snmp_exporter.service
+  #_enable_service statsd_exporter.service
 }
 
 deinit() {
   _rmdir $HOME/data
   _rmdir $HOME/log
-  _disable_service prometheus.service
+
+  chown -R root:root $HOME
+  chmod 755 $HOME
+
   _disable_service alertmanager.service
-  _disable_service blackbox_exporter.service
-  _disable_service cadvisor.service
+  #_disable_service blackbox_exporter.service
+  #_disable_service cadvisor.service
   _disable_service node_exporter.service
+  _disable_service prometheus.service
   _disable_service pushgateway.service
-  _disable_service snmp_exporter.service
-  _disable_service statsd_exporter.service
+  #_disable_service snmp_exporter.service
+  #_disable_service statsd_exporter.service
 }
 
 start() {
-  _start_service prometheus.service
   _start_service alertmanager.service
-  _start_service blackbox_exporter.service
-  _start_service cadvisor.service
+  #_start_service blackbox_exporter.service
+  #_start_service cadvisor.service
   _start_service node_exporter.service
+  _start_service prometheus.service
   _start_service pushgateway.service
-  _start_service snmp_exporter.service
-  _start_service statsd_exporter.service
+  #_start_service snmp_exporter.service
+  #_start_service statsd_exporter.service
 }
 
 stop() {
-  _stop_service prometheus.service
   _stop_service alertmanager.service
-  _stop_service blackbox_exporter.service
-  _stop_service cadvisor.service
+  #_stop_service blackbox_exporter.service
+  #_stop_service cadvisor.service
   _stop_service node_exporter.service
+  _stop_service prometheus.service
   _stop_service pushgateway.service
-  _stop_service snmp_exporter.service
-  _stop_service statsd_exporter.service
+  #_stop_service snmp_exporter.service
+  #_stop_service statsd_exporter.service
 }
 
 show() {
-  systemctl status prometheus.service
   systemctl status alertmanager.service
-  systemctl status blackbox_exporter.service
-  systemctl status cadvisor.service
+  #systemctl status blackbox_exporter.service
+  #systemctl status cadvisor.service
   systemctl status node_exporter.service
+  systemctl status prometheus.service
   systemctl status pushgateway.service
-  systemctl status snmp_exporter.service
-  systemctl status statsd_exporter.service
+  #systemctl status snmp_exporter.service
+  #systemctl status statsd_exporter.service
 }
 
 case "$1" in

@@ -20,70 +20,76 @@ scrape_configs:
     metrics_path: '/metrics'
     scheme: 'http'
     static_configs:
-      - targets: ['192.168.5.220:9090']
-        labels:
-          group: 'standard'
-          instance: 'default'
-
-  - job_name: 'blackbox_exporter'
-    metrics_path: /probe
-    params:
-      module: [http_2xx]
-    dns_sd_configs:
-      - names:
-          - www.imssyang.com
-        type: A
-        port: 443
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-      - source_labels: [__param_target]
-        target_label: instance
-      - target_label: __address__
-        replacement: 192.168.5.220:9115
-    static_configs:
-      - targets:
-        - http://www.imssyang.com
-        - https://www.imssyang.com
+      - targets: ['0.0.0.0:9090']
         labels:
           group: 'system'
           instance: 'default'
+
+  #- job_name: 'blackbox_exporter'
+  #  metrics_path: /probe
+  #  params:
+  #    module: [http_2xx]
+  #  dns_sd_configs:
+  #    - names:
+  #        - www.imssyang.com
+  #      type: A
+  #      port: 443
+  #  relabel_configs:
+  #    - source_labels: [__address__]
+  #      target_label: __param_target
+  #    - source_labels: [__param_target]
+  #      target_label: instance
+  #    - target_label: __address__
+  #      replacement: 192.168.5.220:9115
+  #  static_configs:
+  #    - targets:
+  #      - http://www.imssyang.com
+  #      - https://www.imssyang.com
+  #      labels:
+  #        group: 'system'
+  #        instance: 'default'
 
   - job_name: 'node_exporter'
     scrape_interval: 5s
     static_configs:
-      - targets: ['192.168.5.220:9100']
+      - targets: ['0.0.0.0:9100']
         labels:
           group: 'system'
           instance: 'default'
 
-  - job_name: 'snmp_exporter'
-    metrics_path: /snmp
-    params:
-      module: [if_mib]
+  - job_name: 'pushgateway'
+    honor_labels: true
     static_configs:
-      - targets: ['192.168.5.220:9116']
+      - targets: ['0.0.0.0:9091']
         labels:
           group: 'system'
           instance: 'default'
 
-  - job_name: 'statsd_exporter'
-    scrape_interval: 5s
-    static_configs:
-      - targets: ['192.168.5.220:9102']
-        labels:
-          group: 'system'
-          instance: 'default'
+  #- job_name: 'snmp_exporter'
+  #  metrics_path: /snmp
+  #  params:
+  #    module: [if_mib]
+  #  static_configs:
+  #    - targets: ['192.168.5.220:9116']
+  #      labels:
+  #        group: 'system'
+  #        instance: 'default'
 
-  - job_name: 'python-app'
-    scrape_interval: 5s
-    static_configs:
-      - targets: ['192.168.5.220:8000']
+  #- job_name: 'statsd_exporter'
+  #  scrape_interval: 5s
+  #  static_configs:
+  #    - targets: ['192.168.5.220:9102']
+  #      labels:
+  #        group: 'system'
+  #        instance: 'default'
 
 alerting:
   alertmanagers:
     - static_configs:
-        - targets: ['192.168.5.220:9093']
+        - targets: ['0.0.0.0:9093']
+          labels:
+            group: 'system'
+            instance: 'default'
 
 #remote_write:
 

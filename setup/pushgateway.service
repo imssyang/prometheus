@@ -8,7 +8,8 @@ User=root
 Group=root
 Type=simple
 ExecStart=/opt/prometheus/bin/pushgateway \
-    --web.listen-address ':9091'
+    --web.listen-address '0.0.0.0:9091' \
+    --web.enable-admin-api
 
 [Install]
 WantedBy=multi-user.target
